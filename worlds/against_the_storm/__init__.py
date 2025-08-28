@@ -1,4 +1,3 @@
-from random import randrange, sample
 import re
 import logging
 from typing import Any, Dict, List, Tuple
@@ -105,9 +104,9 @@ class AgainstTheStormWorld(World):
             self.production_recipes = { key:[[item, num] for item,num in value.items()] for key,value in all_production.items() if not isinstance(value, str) }
             
     def get_filler_item_name(self):
-        choice = self.multiworld.random.choices(self.filler_items)[0]
+        choice = self.random.choices(self.filler_items)[0]
         # Reroll Survivor Bonding to half its occurence
-        return self.multiworld.random.choices(self.filler_items)[0] if choice == "Survivor Bonding" and self.multiworld.random.random() < 0.5 else choice
+        return self.random.choices(self.filler_items)[0] if choice == "Survivor Bonding" and self.random.random() < 0.5 else choice
 
     def create_item(self, item: str) -> AgainstTheStormItem:
         return AgainstTheStormItem(item, item_dict.get(item)[0], self.item_name_to_id[item], self.player)
