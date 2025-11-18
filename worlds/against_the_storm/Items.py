@@ -1,6 +1,7 @@
 from enum import Enum
-from typing import Dict, Set, Tuple
+
 from BaseClasses import Item, ItemClassification
+
 
 class AgainstTheStormItem(Item):
     game: str = "Against the Storm"
@@ -10,9 +11,9 @@ class ATSItemClassification(Enum):
     blueprint = 2
     filler = 3
     guardian_part = 4
-    dlc_blueprint = 5
+    keepers_dlc_blueprint = 5
 
-item_dict: Dict[str, Tuple[ItemClassification, ATSItemClassification, str]] = {
+item_dict: dict[str, tuple[ItemClassification, ATSItemClassification, str | None]] = {
     "Guardian Heart": (ItemClassification.progression, ATSItemClassification.guardian_part, "Guardian Part"),
     "Guardian Blood": (ItemClassification.progression, ATSItemClassification.guardian_part, "Guardian Part"),
     "Guardian Feathers": (ItemClassification.progression, ATSItemClassification.guardian_part, "Guardian Part"),
@@ -96,7 +97,7 @@ item_dict: Dict[str, Tuple[ItemClassification, ATSItemClassification, str]] = {
     "10 Starting Planks": (ItemClassification.filler, ATSItemClassification.filler, None),
     "10 Starting Tools": (ItemClassification.filler, ATSItemClassification.filler, None),
     "Survivor Bonding": (ItemClassification.filler, ATSItemClassification.filler, None),
- 
+
     "Forager's Camp": (ItemClassification.progression, ATSItemClassification.blueprint, "Gathering Blueprint"),
     "Herbalist's Camp": (ItemClassification.progression, ATSItemClassification.blueprint, "Gathering Blueprint"),
     "Trapper's Camp": (ItemClassification.progression, ATSItemClassification.blueprint, "Gathering Blueprint"),
@@ -148,32 +149,32 @@ item_dict: Dict[str, Tuple[ItemClassification, ATSItemClassification, str]] = {
     "Weaver": (ItemClassification.progression, ATSItemClassification.blueprint, None),
     "Workshop": (ItemClassification.progression, ATSItemClassification.blueprint, None),
     "Cobbler": (ItemClassification.progression, ATSItemClassification.blueprint, None),
-    
-    "Pantry": (ItemClassification.progression, ATSItemClassification.dlc_blueprint, None),
-    "Cannery": (ItemClassification.progression, ATSItemClassification.dlc_blueprint, None),
-    
+
+    "Pantry": (ItemClassification.progression, ATSItemClassification.keepers_dlc_blueprint, None),
+    "Cannery": (ItemClassification.progression, ATSItemClassification.keepers_dlc_blueprint, None),
+
     "Bath House": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Clan Hall": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
-    "Explorers Lodge": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
+    "Academy": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Guild House": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Market": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Monastery": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Tavern": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Tea Doctor": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
     "Temple": (ItemClassification.progression, ATSItemClassification.blueprint, "Service Blueprint"),
-    
-    "Forum": (ItemClassification.progression, ATSItemClassification.dlc_blueprint, "Service Blueprint"),
+
+    "Forum": (ItemClassification.progression, ATSItemClassification.keepers_dlc_blueprint, "Service Blueprint"),
 }
 
-def get_item_name_groups(item_dict: Dict[str, Tuple[ItemClassification, ATSItemClassification, str]]):
-    item_groups: Dict[str, Set[str]] = {}
+def get_item_name_groups(item_dict: dict[str, tuple[ItemClassification, ATSItemClassification, str | None]]):
+    item_groups: dict[str, set[str]] = {}
     for item_key, (_ap_classification, _classification, item_group) in item_dict.items():
         if item_group is None:
             continue
-        
+
         if item_group in item_groups:
             item_groups[item_group].add(item_key)
         else:
             item_groups[item_group] = { item_key }
-        
+
     return item_groups

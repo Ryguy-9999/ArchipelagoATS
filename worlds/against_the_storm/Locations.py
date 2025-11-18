@@ -1,6 +1,7 @@
 from enum import Enum
-from typing import Dict, List, Set, Tuple
+
 from BaseClasses import Location
+
 
 class AgainstTheStormLocation(Location):
     game: str = "Against the Storm"
@@ -9,27 +10,31 @@ class ATSLocationClassification(Enum):
     basic = 1
     biome_rep = 2
     extra_trade = 3
-    dlc = 4
-    dlc_biome_rep = 5
-    dlc_grove_expedition = 6
-    
+    dlc_keepers = 4
+    dlc_keepers_biome_rep = 5
+    dlc_nightwatchers = 6
+    dlc_nightwatchers_biome_rep = 7
+    dlc_grove_expedition = 8
+
 # How to interpret these logic definitions:
 # To reach a location, you need at least one item from each string. For example:
 # ["A,B,C", "D,E"] means (A or B or C) and (D or E)
-location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
+location_dict: dict[str, tuple[ATSLocationClassification, list[str], str]] = {
     "First Reputation through Resolve - Humans": (ATSLocationClassification.basic, ["Porridge,Biscuits,Pie,Coats", "Planks", "Bricks"], "First Resolve Reputation"),
     "First Reputation through Resolve - Beavers": (ATSLocationClassification.basic, ["Ale,Scrolls,Wine", "Planks", "Bricks", "Fabric"], "First Resolve Reputation"),
     "First Reputation through Resolve - Lizards": (ATSLocationClassification.basic, [], "First Resolve Reputation"),
     "First Reputation through Resolve - Harpies": (ATSLocationClassification.basic, [], "First Resolve Reputation"),
     "First Reputation through Resolve - Foxes": (ATSLocationClassification.basic, [], "First Resolve Reputation"),
-    "First Reputation through Resolve - Frogs": (ATSLocationClassification.dlc, ["Bricks"], "First Resolve Reputation"),
+    "First Reputation through Resolve - Frogs": (ATSLocationClassification.dlc_keepers, ["Bricks"], "First Resolve Reputation"),
+    "First Reputation through Resolve - Bats": (ATSLocationClassification.dlc_nightwatchers, ["Pipes"], "First Resolve Reputation"),
     "50 Resolve - Humans": (ATSLocationClassification.basic, ["Porridge,Biscuits,Pie", "Coats", "Ale", "Incense", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
     "50 Resolve - Beavers": (ATSLocationClassification.basic, ["Biscuits,Pickled Goods", "Coats", "Ale", "Scrolls", "Wine", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
     "50 Resolve - Lizards": (ATSLocationClassification.basic, ["Jerky,Skewers,Pie", "Pickled Goods", "Boots", "Training Gear", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
     "50 Resolve - Harpies": (ATSLocationClassification.basic, ["Jerky", "Paste", "Coats", "Boots", "Scrolls", "Tea", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
     "50 Resolve - Foxes": (ATSLocationClassification.basic, ["Porridge,Skewers,Pickled Goods", "Boots", "Incense", "Tea", "Crystallized Dew", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
-    "50 Resolve - Frogs": (ATSLocationClassification.dlc, ["Paste,Biscuits,Pie", "Boots", "Incense", "Wine", "Training Gear", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
-    
+    "50 Resolve - Frogs": (ATSLocationClassification.dlc_keepers, ["Paste,Biscuits,Pie", "Boots", "Incense", "Wine", "Training Gear", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
+    "50 Resolve - Bats": (ATSLocationClassification.dlc_nightwatchers, ["Paste,Biscuits,Skewers", "Coats", "Scrolls", "Training Gear", "Planks", "Fabric", "Bricks", "Purging Fire"], "50 Resolve"),
+
     "1st Reputation - Royal Woodlands": (ATSLocationClassification.basic, [], "Royal Woodlands"),
     "2nd Reputation - Royal Woodlands": (ATSLocationClassification.biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Royal Woodlands"),
     "3rd Reputation - Royal Woodlands": (ATSLocationClassification.biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Royal Woodlands"),
@@ -120,42 +125,78 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "16th Reputation - Cursed Royal Woodlands": (ATSLocationClassification.biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Cursed Royal Woodlands"),
     "17th Reputation - Cursed Royal Woodlands": (ATSLocationClassification.biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Cursed Royal Woodlands"),
     "Victory - Cursed Royal Woodlands": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Cursed Royal Woodlands"),
-    "1st Reputation - Coastal Grove": (ATSLocationClassification.dlc, [], "Coastal Grove"),
-    "2nd Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
-    "3rd Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
-    "4th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
-    "5th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Coastal Grove"),
-    "6th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
-    "7th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
-    "8th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
-    "9th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
-    "10th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "11th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "12th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "13th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "14th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "15th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "16th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "17th Reputation - Coastal Grove": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "Victory - Coastal Grove": (ATSLocationClassification.dlc, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
-    "1st Reputation - Ashen Thicket": (ATSLocationClassification.dlc, [], "Ashen Thicket"),
-    "2nd Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
-    "3rd Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
-    "4th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
-    "5th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Ashen Thicket"),
-    "6th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
-    "7th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
-    "8th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
-    "9th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
-    "10th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "11th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "12th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "13th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "14th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "15th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "16th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "17th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
-    "Victory - Ashen Thicket": (ATSLocationClassification.dlc, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "1st Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers, [], "Coastal Grove"),
+    "2nd Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
+    "3rd Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
+    "4th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Coastal Grove"),
+    "5th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Coastal Grove"),
+    "6th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
+    "7th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
+    "8th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
+    "9th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Coastal Grove"),
+    "10th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "11th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "12th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "13th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "14th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "15th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "16th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "17th Reputation - Coastal Grove": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "Victory - Coastal Grove": (ATSLocationClassification.dlc_keepers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Coastal Grove"),
+    "1st Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers, [], "Ashen Thicket"),
+    "2nd Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
+    "3rd Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
+    "4th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Ashen Thicket"),
+    "5th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Ashen Thicket"),
+    "6th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
+    "7th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
+    "8th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
+    "9th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Ashen Thicket"),
+    "10th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "11th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "12th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "13th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "14th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "15th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "16th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "17th Reputation - Ashen Thicket": (ATSLocationClassification.dlc_keepers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "Victory - Ashen Thicket": (ATSLocationClassification.dlc_keepers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Ashen Thicket"),
+    "1st Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers, [], "Bamboo Flats"),
+    "2nd Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Bamboo Flats"),
+    "3rd Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Bamboo Flats"),
+    "4th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Bamboo Flats"),
+    "5th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Bamboo Flats"),
+    "6th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Bamboo Flats"),
+    "7th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Bamboo Flats"),
+    "8th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Bamboo Flats"),
+    "9th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Bamboo Flats"),
+    "10th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "11th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "12th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "13th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "14th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "15th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "16th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "17th Reputation - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "Victory - Bamboo Flats": (ATSLocationClassification.dlc_nightwatchers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Bamboo Flats"),
+    "1st Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers, [], "Rocky Ravine"),
+    "2nd Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Rocky Ravine"),
+    "3rd Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Rocky Ravine"),
+    "4th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Rocky Ravine"),
+    "5th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Purging Fire"], "Rocky Ravine"),
+    "6th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Rocky Ravine"),
+    "7th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks,Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Rocky Ravine"),
+    "8th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Rocky Ravine"),
+    "9th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire"], "Rocky Ravine"),
+    "10th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "11th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks,Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "12th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "13th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools,Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "14th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "15th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "16th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "17th Reputation - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers_biome_rep, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
+    "Victory - Rocky Ravine": (ATSLocationClassification.dlc_nightwatchers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire"], "Rocky Ravine"),
     "1st Reputation - Sealed Forest": (ATSLocationClassification.basic, [], "Sealed Forest"),
     "2nd Reputation - Sealed Forest": (ATSLocationClassification.biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Sealed Forest"),
     "3rd Reputation - Sealed Forest": (ATSLocationClassification.biome_rep, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Sealed Forest"),
@@ -249,7 +290,7 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "Reach level 3 standing with ALL 4 neighbors": (ATSLocationClassification.basic, ["Amber", "Planks", "Fabric,Bricks", "Pack of Provisions", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire", "Pack of Building Materials,Pack of Crops,Pack of Luxury Goods,Pack of Trade Goods"], "Trade Standing"),
     "Reach level 4 standing with ALL 4 neighbors": (ATSLocationClassification.basic, ["Amber", "Planks", "Fabric", "Bricks", "Pack of Provisions", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire", "Pack of Building Materials,Pack of Crops,Pack of Luxury Goods,Pack of Trade Goods"], "Trade Standing"),
     "Reach level 5 standing with ALL 4 neighbors": (ATSLocationClassification.basic, ["Amber", "Planks", "Fabric", "Bricks", "Pack of Provisions", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Purging Fire", "Pack of Building Materials", "Pack of Crops", "Pack of Luxury Goods", "Pack of Trade Goods"], "Trade Standing"),
-    
+
     "Completed Order - 1st Pack": (ATSLocationClassification.basic, [], "Complete Orders"),
     "Completed Order - 2nd Pack": (ATSLocationClassification.basic, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish"], "Complete Orders"),
     "Completed Order - 3rd Pack": (ATSLocationClassification.basic, ["Berries,Eggs,Insects,Meat,Mushrooms,Roots,Vegetables,Fish", "Planks,Bricks,Fabric"], "Complete Orders"),
@@ -259,7 +300,7 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "Completed Order - 7th Pack": (ATSLocationClassification.basic, ["Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Planks", "Bricks,Fabric", "Purging Fire"], "Complete Orders"),
     "Completed Order - 8th Pack": (ATSLocationClassification.basic, ["Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Planks", "Bricks", "Fabric", "Purging Fire"], "Complete Orders"),
     "Completed Order - 9th Pack": (ATSLocationClassification.basic, ["Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Planks", "Bricks", "Fabric", "Amber,Tools", "Purging Fire"], "Complete Orders"),
-    
+
     "Upgraded Hearth - 1st Tier": (ATSLocationClassification.basic, [], "Hearth Tier"),
     "Upgraded Hearth - 2nd Tier": (ATSLocationClassification.basic, ["Planks"], "Hearth Tier"),
     "Upgraded Hearth - 3rd Tier": (ATSLocationClassification.basic, ["Planks", "Fabric", "Bricks"], "Hearth Tier"),
@@ -273,8 +314,9 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "Have 20 Villagers in fully upgraded Housing - Lizards": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials", "Jerky,Skewers"], "20 Housed Villagers"),
     "Have 20 Villagers in fully upgraded Housing - Harpies": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials", "Dye"], "20 Housed Villagers"),
     "Have 20 Villagers in fully upgraded Housing - Foxes": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials", "Resin", "Crystallized Dew"], "20 Housed Villagers"),
-    "Have 20 Villagers in fully upgraded Housing - Frogs": (ATSLocationClassification.dlc, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials"], "20 Housed Villagers"),
-    
+    "Have 20 Villagers in fully upgraded Housing - Frogs": (ATSLocationClassification.dlc_keepers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials"], "20 Housed Villagers"),
+    "Have 20 Villagers in fully upgraded Housing - Bats": (ATSLocationClassification.dlc_nightwatchers, ["Planks", "Bricks", "Fabric", "Jerky,Porridge,Skewers,Biscuits,Pie,Pickled Goods,Paste", "Amber,Tools", "Ale,Training Gear,Incense,Scrolls,Wine,Tea", "Purging Fire", "Pack of Building Materials", "Pipes"], "20 Housed Villagers"),
+
     "Cursed Royal Woodlands - Appease a Calm Ghost": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Incense,Oil,Sea Marrow,Tools,Ancient Tablet"], "Cursed Royal Woodlands"),
     "Cursed Royal Woodlands - Appease an Angry Ghost": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric", "Incense,Oil,Sea Marrow,Tools,Ancient Tablet"], "Cursed Royal Woodlands"),
     "The Marshlands - Harvest from an Ancient Proto Wheat": (ATSLocationClassification.basic, ["Planks", "Bricks", "Fabric"], "The Marshlands"),
@@ -283,9 +325,9 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "Scarlet Orchard - Reconstruct the Sealed Spider": (ATSLocationClassification.basic, ["Planks", "Fabric", "Bricks", "Eggs,Meat,Roots,Berries,Mushrooms,Insects", "Incense,Scrolls,Tea,Resin", "Coal,Oil,Sea Marrow,Planks", "Stone,Copper Bars,Dye,Barrels,Incense", "Tools,Parts,Pipes"], "Scarlet Orchard"),
     "Scarlet Orchard - Reconstruct the Sea Snake": (ATSLocationClassification.basic, ["Planks", "Fabric", "Bricks", "Eggs,Meat,Roots,Berries,Mushrooms,Insects", "Incense,Scrolls,Tea,Resin", "Coal,Oil,Sea Marrow,Planks", "Stone,Copper Bars,Dye,Barrels,Incense", "Tools,Parts,Pipes"], "Scarlet Orchard"),
     "Scarlet Orchard - Reconstruct the Smoldering Scorpion": (ATSLocationClassification.basic, ["Planks", "Fabric", "Bricks", "Eggs,Meat,Roots,Berries,Mushrooms,Insects", "Incense,Scrolls,Tea,Resin", "Coal,Oil,Sea Marrow,Planks", "Stone,Copper Bars,Dye,Barrels,Incense", "Tools,Parts,Pipes"], "Scarlet Orchard"),
-    "Ashen Thicket - Forge 1st Cornerstone": (ATSLocationClassification.dlc, [], "Ashen Thicket"),
-    "Ashen Thicket - Forge 2nd Cornerstone": (ATSLocationClassification.dlc, ["Planks", "Bricks"], "Ashen Thicket"),
-    "Ashen Thicket - Forge 3rd Cornerstone": (ATSLocationClassification.dlc, ["Planks", "Bricks", "Coal,Copper Ore,Salt"], "Ashen Thicket"),
+    "Ashen Thicket - Forge 1st Cornerstone": (ATSLocationClassification.dlc_keepers, [], "Ashen Thicket"),
+    "Ashen Thicket - Forge 2nd Cornerstone": (ATSLocationClassification.dlc_keepers, ["Planks", "Bricks"], "Ashen Thicket"),
+    "Ashen Thicket - Forge 3rd Cornerstone": (ATSLocationClassification.dlc_keepers, ["Planks", "Bricks", "Coal,Copper Ore,Salt"], "Ashen Thicket"),
     "Coastal Grove - 1st Expedition": (ATSLocationClassification.dlc_grove_expedition, ["Algae,Fish", "Roots,Berries,Insects,Mushrooms,Vegetables"], "Coastal Grove Expeditions"),
     "Coastal Grove - 2nd Expedition": (ATSLocationClassification.dlc_grove_expedition, ["Planks", "Algae,Fish", "Roots,Berries,Insects,Mushrooms,Vegetables"], "Coastal Grove Expeditions"),
     "Coastal Grove - 3rd Expedition": (ATSLocationClassification.dlc_grove_expedition, ["Planks", "Bricks", "Fabric", "Algae,Fish", "Roots,Berries,Insects,Mushrooms,Vegetables", "Paste,Skewers,Porridge"], "Coastal Grove Expeditions"),
@@ -308,22 +350,21 @@ location_dict: Dict[str, Tuple[ATSLocationClassification, str]] = {
     "Coastal Grove - 20th Expedition": (ATSLocationClassification.dlc_grove_expedition, ["Planks", "Bricks", "Fabric", "Purging Fire", "Algae,Fish", "Roots,Berries,Insects,Mushrooms,Vegetables", "Biscuits,Pie,Jerky,Pickled Goods", "Paste,Skewers,Porridge", "Ale,Tea,Wine"], "Coastal Grove Expeditions"),
 }
 
-def get_location_name_groups(location_dict: Dict[str, Tuple[ATSLocationClassification, List[str], str]]):
-    species_names = ["Humans", "Beavers", "Lizards", "Harpies", "Foxes", "Frogs"]
-    location_groups: Dict[str, Set[str]] = {}
+def get_location_name_groups(location_dict: dict[str, tuple[ATSLocationClassification, list[str], str]]):
+    species_names = ["Humans", "Beavers", "Lizards", "Harpies", "Foxes", "Frogs", "Bats"]
+    location_groups: dict[str, set[str]] = {}
     for location_key, (_classification, _logic, location_group) in location_dict.items():
         if location_group in location_groups:
             location_groups[location_group].add(location_key)
         else:
             location_groups[location_group] = { location_key }
-        
+
         # Create additional species groups
         for species in species_names:
             if species in location_key:
-                location_group = species
-                if location_group in location_groups:
-                    location_groups[location_group].add(location_key)
+                if species in location_groups:
+                    location_groups[species].add(location_key)
                 else:
-                    location_groups[location_group] = { location_key }
-        
+                    location_groups[species] = { location_key }
+
     return location_groups

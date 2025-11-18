@@ -1,10 +1,10 @@
 
 from dataclasses import dataclass
-from itertools import chain
-from typing import Dict, List
+
 from BaseClasses import CollectionState
 
 from .Items import item_dict
+
 
 @dataclass
 class Recipe:
@@ -69,7 +69,7 @@ blueprint_recipes = {
     "Grill": [Recipe("Skewers", 3), Recipe("Paste", 2), Recipe("Copper Bars", 1)],
     "Ranch": [Recipe("Meat", 1), Recipe("Leather", 1), Recipe("Eggs", 1)],
     "Smokehouse": [Recipe("Jerky", 3), Recipe("Pottery", 1), Recipe("Incense", 1)],
-    "Alchemist\'s Hut": [Recipe("Crystallized Dew", 2), Recipe("Tea", 2), Recipe("Wine", 2)],
+    "Alchemist's Hut": [Recipe("Crystallized Dew", 2), Recipe("Tea", 2), Recipe("Wine", 2)],
     "Apothecary": [Recipe("Tea", 2), Recipe("Dye", 2), Recipe("Jerky", 2)],
     "Artisan": [Recipe("Coats", 2), Recipe("Barrels", 2), Recipe("Scrolls", 2)],
     "Brewery": [Recipe("Ale", 3), Recipe("Porridge", 2), Recipe("Pack of Crops", 1)],
@@ -78,7 +78,7 @@ blueprint_recipes = {
     "Clothier": [Recipe("Coats", 3), Recipe("Pack of Building Materials", 2), Recipe("Waterskins", 1)],
     "Cooperage": [Recipe("Barrels", 3), Recipe("Coats", 2), Recipe("Pack of Luxury Goods", 1)],
     "Distillery": [Recipe("Pickled Goods", 2), Recipe("Ale", 2), Recipe("Incense", 2)],
-    "Druid\'s Hut": [Recipe("Oil", 3), Recipe("Tea", 2), Recipe("Coats", 1)],
+    "Druid's Hut": [Recipe("Oil", 3), Recipe("Tea", 2), Recipe("Coats", 1)],
     "Furnace": [Recipe("Copper Bars", 2), Recipe("Skewers", 2), Recipe("Pie", 2)],
     "Kiln": [Recipe("Coal", 3), Recipe("Bricks", 1), Recipe("Jerky", 1)],
     "Leatherworker": [Recipe("Waterskins", 3), Recipe("Boots", 2), Recipe("Training Gear", 1)],
@@ -103,7 +103,7 @@ blueprint_recipes = {
 service_blueprints = {
     "Bath House": ["Tea"],
     "Clan Hall": ["Training Gear"],
-    "Explorers Lodge": ["Training Gear", "Scrolls"],
+    "Acadeny": ["Training Gear", "Scrolls"],
     "Forum": ["Training Gear", "Wine"],
     "Guild House": ["Wine", "Scrolls"],
     "Market": ["Ale", "Tea"],
@@ -116,7 +116,8 @@ service_blueprints = {
 nonitem_blueprint_recipes = {
     "Crude Workstation": [Recipe("Planks", 0), Recipe("Fabric", 0), Recipe("Bricks", 0), Recipe("Pipes", 0)],
     "Field Kitchen": [Recipe("Skewers", 0), Recipe("Paste", 0), Recipe("Biscuits", 0), Recipe("Pickled Goods", 0)],
-    "Makeshift Post": [Recipe("Pack of Crops", 0), Recipe("Pack of Provisions", 0), Recipe("Pack of Building Materials", 0)],
+    "Makeshift Post":
+        [Recipe("Pack of Crops", 0), Recipe("Pack of Provisions", 0), Recipe("Pack of Building Materials", 0)],
 
     "Flawless Cellar": [Recipe("Wine", 3), Recipe("Pickled Goods", 3), Recipe("Pack of Provisions", 3)],
     "Flawless Brewery": [Recipe("Ale", 3), Recipe("Porridge", 3), Recipe("Pack of Crops", 3)],
@@ -134,17 +135,18 @@ essential_blueprints = [
     "Crude Workstation", "Field Kitchen", "Makeshift Post"
 ]
 
-def has_blueprint_for(state: CollectionState, player: int, blueprint_map: Dict[str, List[Recipe]] | None, good: str) -> bool:
+def has_blueprint_for(state: CollectionState, player: int,
+                      blueprint_map: dict[str, list[Recipe]] | None, good: str) -> bool:
     # blueprint_items are off, meaning we don't need to worry about access to a building that can craft this good
-    if blueprint_map == None:
+    if blueprint_map is None:
         return True
 
     # These goods can be obtained through means that don't require a blueprint item
     if good in ["Berries", "Eggs", "Insects", "Meat", "Mushrooms", "Roots", "Vegetables", "Clay", "Copper Ore", "Grain",
                 "Herbs", "Leather", "Plant Fiber", "Reeds", "Resin", "Stone", "Amber", "Purging Fire", "Sea Marrow",
-                "Parts", "Ancient Tablet", "Algae", "Fish", "Scales"]:
+                "Parts", "Ancient Tablet", "Algae", "Fish", "Scales", "Salt"]:
         return True
-    
+
     # We should check if we have a service building for service goods,
     # as most checks for them are locations about consuming them
     if good in ["Ale", "Incense", "Scrolls", "Tea", "Training Gear", "Wine"]:
@@ -155,16 +157,18 @@ def has_blueprint_for(state: CollectionState, player: int, blueprint_map: Dict[s
     return any(any(good == recipe.product for recipe in blueprint_map[bp]) and
                (bp in essential_blueprints or state.has(bp, player)) for bp in blueprint_map.keys())
 
-def satisfies_recipe(state: CollectionState, player: int, blueprint_map: Dict[str, List[Recipe]] | None, recipe: list[str], debug = False) -> bool:
+def satisfies_recipe(state: CollectionState, player: int,
+                     blueprint_map: dict[str, list[Recipe]] | None, recipe: list[str], debug: bool = False) -> bool:
     # recipe is of the form ["A,B,C", "D,E"] meaning (A or B or C) and (D or E)
     for item_set in recipe:
-        # Break when we can craft one of the items in the column, satisfying it. If we can't satisfy the column, then we can't satisfy `recipe`
+        # Break when we can craft one of the items in the column, satisfying it
+        # If we can't satisfy the column, then we can't satisfy `recipe`
         for item in item_set.split(","):
             if debug:
-                print(item, state.has(item, player), has_blueprint_for(state, player, blueprint_map, item))
-            
-            if not item in item_dict.keys():
-                print(f"[ATS] WARNING: Logical requirement for unknown item: {item}")
+                print(item, state.has(item, player), has_blueprint_for(state, player, blueprint_map, item))  # noqa: T201
+
+            if item not in item_dict.keys():
+                print(f"[ATS] WARNING: Logical requirement for unknown item: {item}")  # noqa: T201
             # We only truly "state.has" an item if we have the production chain that can craft it
             if state.has(item, player) and has_blueprint_for(state, player, blueprint_map, item) and \
                (item not in game_recipes or satisfies_recipe(state, player, blueprint_map, game_recipes[item], debug)):
@@ -172,5 +176,5 @@ def satisfies_recipe(state: CollectionState, player: int, blueprint_map: Dict[st
         else:
             return False
     if debug:
-        print(recipe, "satisfied")
+        print(recipe, "satisfied")  # noqa: T201
     return True

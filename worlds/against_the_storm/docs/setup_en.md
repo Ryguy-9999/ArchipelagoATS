@@ -1,15 +1,15 @@
 # Against the Storm for Archipelago Setup and Usage Guide
 
 ## Required Software
-* Latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Currently tested/working on version 0.5.0.
+* Latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Currently tested/working on version 0.6.4.
 * [Thunderstore Mod Manager](https://www.overwolf.com/app/thunderstore-thunderstore_mod_manager). (While a mod manager is not technically required, this guide will walk through using it to set up the mod)
 * The `against_the_storm.apworld` from the latest [Against The Storm for Archipelago](https://github.com/RyanCirincione/ArchipelagoATS/releases) release.
-* A legal copy of Against the Storm (tested as of v1.4.17, optionally including the Keepers of the Stone DLC).
+* A legal copy of Against the Storm (tested as of v1.8.13, optionally including the Keepers of the Stone and Nightwatchers DLCs).
     * Only tested on Steam version.
 
-## Installing the Archipelago Mod to Against the Storm
+## Installing the Archipelago Mod to Against the Storm using Thunderstore
 1. Open the Thunderstore Mod Manager.
-2. Search for the game Against the Storm and select it. (The first time I did while modding, the game didn't appear. Just closing and reopening Thunderstore I think worked for me)
+2. Search for the game Against the Storm and select it. (The first time I did while modding, the game didn't appear. Just closing and reopening Thunderstore worked for me)
 3. Click Select Profile.
     - Optional: Create a new modding profile and name, if you don't want to use the Default
 4. Click the Get Mods tab.
@@ -36,9 +36,9 @@
 * Optional: backup your save files located in `%userprofile%\AppData\LocalLow\Eremite Games\Against the Storm`
 1. Go to Thunderstore Mod Manager, open your Against the Storm profile with the Against the Storm for Archipelago mod, and click the blue Modded play button.
     * Optional: from the main menu, start a separate profile in the top right if you already have data in your default profile.
-    * Optional: especially if you started a new profile from above, you will almost certainly want to run `meta.addAll` from the dev console, as the mod will assume you have all meta progression unlocked, and probably `goals.unlockAll` as well (these are the deeds, which have things like certain traders, decorations, and Big Shelter. **WARNING**: goals.unlockAll will grant you all the steam achievements. However, v0.9.4 and later blocks platform achievements from sending). The dev console is opened with \` (backtick, to the left of 1 on keyboards) by default, and at least for me only opens in the world map or settlements.
-        * If you run `meta.addAll` on a fresh profile, the Training Expedition will still appear locked. This is a bug in the game's UI. Just enter and leave the Smoldering Citadel, and you should now see the Training Expedition available.
-2. From the world map, open the dev console (default \` (backtick, to the left of 1 on keyboards)) and type `ap.connect <url>:<port> "<slotName>" [password]`.
+    * Optional: especially if you started a new profile from above, you will almost certainly want to run `meta.addAll` from the dev console, as the mod will assume you have all meta progression unlocked, and probably `goals.unlockAll` as well (these are the deeds, which have things like certain traders, decorations, and Big Shelter. **WARNING**: goals.unlockAll will grant you all the steam achievements unless you are on mod version v0.9.4 or later). The dev console is opened with \` (backtick, to the left of 1) by default, and at least for me only opens in the world map or settlements.
+        * If you run `meta.addAll` on a fresh profile, the Training Expedition will still appear locked. This is an issue with the game's UI. Just enter and leave the Smoldering Citadel, and you should now see the Training Expedition available.
+2. From the world map, open the dev console (default \` (backtick, to the left of 1)) and type `ap.connect <url>:<port> "<slotName>" [password]`.
     * If you uploaded `AP_#######.zip` to archipelago, then the room you generated should have the url: `archipelago.gg:#####`
     * slotName is the name from the `AgainstTheStorm.yaml`. The default was `ATSPlayer` if you didn't change it. The quotes are only necessary if the name you set has spaces.
     * password is only necessary if you added a password to your yaml.
