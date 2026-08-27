@@ -1,6 +1,5 @@
 import logging
 import re
-from random import sample
 from typing import Any, ClassVar, Optional
 
 from BaseClasses import CollectionState, MultiWorld, Region
@@ -228,8 +227,8 @@ class AgainstTheStormWorld(World):
 
         # Samples a number of trade locations based on yaml setting (or doesn't for UT, so all locations exist for it)
         if not getattr(self.multiworld, "generation_is_fake", False):
-            trade_locations = sample(trade_locations, self.options.extra_trade_locations.value)
-            
+            trade_locations = self.random.sample(trade_locations, self.options.extra_trade_locations.value)
+
         for location in trade_locations:
             location_pool[location] = self.location_name_to_id[location]
 
@@ -287,7 +286,7 @@ class AgainstTheStormWorld(World):
                     lambda state: state.has("Trapper's Camp", self.player))
             add_rule(self.get_location("The Marshlands - Harvest from a Giant Proto Fungus"),
                     lambda state: state.has("Herbalist's Camp", self.player))
-            
+
     def interpret_slot_data(self, slot_data: Optional[dict[str, Any]]) -> Optional[dict[str, Any]]:
         if slot_data is not None:
             self.production_recipes = {building: [Recipe(recipe[0], recipe[1]) for recipe in recipes]
